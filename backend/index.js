@@ -8,11 +8,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 connectdb();
 
-app.use("/api", authroutes);
+app.use("/api/auth", authroutes);
 
 app.listen(PORT, () => {
   console.log("Server Is Running");
