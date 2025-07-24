@@ -28,12 +28,12 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setError("");
+    seterror("");
 
     try {
       // Remember to replace 'YOUR_BACKEND_URL' with your actual backend URL
       // Or set up a proxy in vite.config.js
-      const response = await fetch("YOUR_BACKEND_URL/api/register", {
+      const response = await fetch("http://localhost:4000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, username }),
@@ -47,9 +47,8 @@ function Register() {
 
       // On success, navigate to the login page
       navigate("/login");
-
     } catch (err) {
-      setError(err.message);
+      seterror(err.message);
     } finally {
       // FIX: This will now run whether the registration succeeds or fails
       setIsSubmitting(false);

@@ -7,7 +7,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkUserStatus = async () => {
       try {
-        const response = await fetch("/api/user/getuser");
+        const response = await fetch("http://localhost:4000/api/user/getuser", {
+          credentials: "include",
+        });
 
         if (response.ok) {
           const userData = await response.json();
@@ -23,27 +25,45 @@ export const AuthProvider = ({ children }) => {
   }, []);
   const login = async (email, password) => {
     try {
-      const userresponse = await fetch("YOUR_BACKEND_URL/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await userresponse.json();
-      if (userresponse.ok) {
-        setuser(data);
-      } else {
-        throw new Error(data.message || "Failed to login");
+      const loginResponse = await fetch(
+        "http://localhost:4000/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+          credentials: "include",
+        }
+      );
+
+      if (!loginResponse.ok) {
+        const errorData = await loginResponse.json();
+        console.error("Login API call failed:", errorData.message);
+        throw new Error(errorData.message || "Login failed");
       }
+
+      const userResponse = await fetch(
+        "http://localhost:4000/api/user/getuser",
+        { credentials: "include" }
+      );
+      const userData = await userResponse.json();
+
+      if (!userResponse.ok) {
+        throw new Error("Failed to fetch user data after login.");
+      }
+
+      setUser(userData);
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("An error occurred in the login process:", error);
+      throw error;
     }
   };
   const logout = async () => {
     try {
       // Call the backend to clear the httpOnly cookie
-      await fetch("/api/auth/logout", { method: "POST" });
+      await fetch("http://localhost:4000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
