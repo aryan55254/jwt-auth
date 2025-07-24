@@ -1,9 +1,9 @@
-const router = require("express").Router();
+const authrouter = require("express").Router();
 const user = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const { generatejwt, clearjwt } = require("../utils/jwt");
 //register
-router.post("/register", async (req, res) => {
+authrouter.post("/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
@@ -29,7 +29,7 @@ router.post("/register", async (req, res) => {
   }
 });
 //login
-router.post("/login", async (req, res) => {
+authrouter.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -54,7 +54,7 @@ router.post("/login", async (req, res) => {
   }
 });
 //logout
-router.post("/logout", async (req, res) => {
+authrouter.post("/logout", async (req, res) => {
   try {
     clearjwt(res);
     res.status(200).json({ mesage: "logout successful" });
@@ -63,4 +63,4 @@ router.post("/logout", async (req, res) => {
     res.status(500).json({ message: "internal server error ", error });
   }
 });
-module.exports = router;
+module.exports = authrouter;
