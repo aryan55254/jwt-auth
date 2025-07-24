@@ -3,31 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
-const handleEmailChange = (e) => {
-  setEmail(e.target.value);
-  if (error) seterror(""); // Clear error on new input
-};
 
-const handlePasswordChange = (e) => {
-  setPassword(e.target.value);
-  if (error) seterror(""); // Clear error on new input
-};
-
-const handlesubmit = async (e) => {
-  setIsSubmitting(true);
-  e.preventDefault();
-  seterror("");
-
-  try {
-    await login(email, password);
-    setEmail("");
-    setPassword("");
-    setIsSubmitting(false);
-    navigate("/user");
-  } catch (err) {
-    seterror(err.message);
-  }
-};
 function Login() {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
@@ -36,6 +12,31 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (error) seterror(""); // Clear error on new input
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (error) seterror(""); // Clear error on new input
+  };
+
+  const handlesubmit = async (e) => {
+    setIsSubmitting(true);
+    e.preventDefault();
+    seterror("");
+
+    try {
+      await login(email, password);
+      setEmail("");
+      setPassword("");
+      setIsSubmitting(false);
+      navigate("/user");
+    } catch (err) {
+      seterror(err.message);
+    }
+  };
   return (
     <div className="bg-gray-900 min-h-screen flex items-center justify-center font-sans">
       <div className="w-full max-w-md mx-auto bg-gray-800 rounded-2xl shadow-2xl p-8 md:p-12 text-white">
@@ -135,7 +136,10 @@ function Login() {
         <div className="text-center mt-8">
           <p className="text-sm text-gray-400">
             Don't have an account?{" "}
-            <Link to='/register' className="font-medium text-teal-400 hover:underline">
+            <Link
+              to="/register"
+              className="font-medium text-teal-400 hover:underline"
+            >
               Sign Up
             </Link>
           </p>
